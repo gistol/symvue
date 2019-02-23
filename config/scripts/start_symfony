@@ -1,0 +1,1 @@
+cd /home/<your_username>/Docker/symfony;/usr/local/bin/docker-compose exec -T php-fpm sh -c "php bin/console cache:clear --env=prod --no-debug"

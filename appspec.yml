@@ -1,0 +1,26 @@
+version: 0.0
+os: linux
+files:
+  - source: / 
+    destination: /home/<your_username>/site
+permissions:
+  - object: /home/<your_username>/site
+    pattern: "**"
+    owner: ec2-user
+    group: ec2-user
+    mode: 755
+hooks:
+  BeforeInstall:
+    - location: config/scripts/stop_docker
+      timeout: 300
+      runas: ec2-user 
+  ApplicationStart:
+    - location: config/scripts/start_docker
+      timeout: 300
+      runas: ec2-user
+    - location: config/scripts/start_dependencies
+      timeout: 7600
+      runas: ec2-user
+    - location: config/scripts/start_symfony
+      timeout: 300
+      runas: ec2-user

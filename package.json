@@ -1,0 +1,36 @@
+{
+  "name": "symvue",
+  "version": "2019.2",
+  "description": "vue.js client for SymVue, a media Web Project built upon Symfony & vue.js",
+  "keywords": [
+    "symfony",
+    "vue"
+  ],
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/jameshcooper/symvue/cli.git"
+  },
+  "license": "MIT",
+  "author": "James Cooper <symvue@jameshcooper.com> (https://jameshcooper.com)",
+  "scripts": {
+    "dev": "encore dev-server --hot --disableHostCheck=true",
+    "build": "encore production"
+  },
+  "devDependencies": {
+    "@fortawesome/free-solid-svg-icons": "^5.2.0",
+    "@fortawesome/free-brands-svg-icons": "^5.7.2",
+    "@fortawesome/fontawesome-svg-core": "^1.2.15",
+    "@fortawesome/vue-fontawesome": "^0.1.1",
+    "@symfony/webpack-encore": "^0.23.0",
+    "axios": "^0.18.0",
+    "bootstrap-vue": "^2.0.0-rc.13",
+    "node-sass": "^4.11.0",
+    "sass-loader": "^7.1.0",
+    "vue": "^2.6.7",
+    "vue-analytics": "^5.16.2",
+    "vue-loader": "^15.6.4",
+    "vue-router": "^3.0.2",
+    "vue-template-compiler": "^2.6.7",
+    "webpack-notifier": "^1.7.0"
+  }
+}

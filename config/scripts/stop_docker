@@ -1,0 +1,2 @@
+#!/bin/bash
+cd /home/<your_username>/Docker/symfony;/usr/local/bin/docker-compose stop 
