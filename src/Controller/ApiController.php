@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ApiController extends MyController
 {
     /**
-     * @Route("album/{album_name}/{size}", name="_album")
+     * @Route("album/{album_name}/{size}", name="_album", requirements={"album_name"="^[a-zA-Z0-9]*$", "size"="^[a-zA-Z0-9]*$"})
      *
      * @param URLBuilder $photos
      * @param string     $album_name
