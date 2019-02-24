@@ -34,7 +34,7 @@ class URLBuilder
 
     public function albumDisplay($size): bool
     {
-        if ('all' != $size && !is_null($size)) {
+        if ('all' != $size && !is_null($size) && in_array($size, $this->presets)) {
             foreach ($this->cloud->dir_contents as $r) {
                 $path = $this->urlBuilder->getUrl(join('/', [$this->cloud->dir_name, $r['basename']]), ['p' => $size]);
 
