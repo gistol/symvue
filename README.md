@@ -12,14 +12,70 @@ Our solution is built on hosting images in an AWS S3 Bucket, and processing the 
 
 The frontend client lets the Symfony controller handle loading the image. No need to require these assets with webpack! Simply do a get request to the albums endpoint, and the resulting JSON includes the image paths. 
 
+# Features
+* [Symfony](https://github.com/symfony/symfony)
+* [Flysystem](https://github.com/thephpleague/flysystem)
+* [Glide](https://github.com/thephpleague/glide)
+* [Webpack-Encore](https://github.com/symfony/webpack-encore)
+* [vue.js](https://github.com/vuejs)
+* [vue-router](https://github.com/vuejs/vue-router)
+* [axios](https://github.com/axios/axios) 
+
+Also includes a [vue-bootstrap](https://bootstrap-vue.js.org/) demo website with vue-fontawesome to demonstrate the routes, data getters and to help get the project started. 
+
+# Demo
+
+[http://symvue.jameshcooper.com](http://symvue.jameshcooper.com) - IMDB Movie App
+
+
+# Installation & Development
+
+1. `cd /var/www`
+2. `git clone . `
+3. once cloned, the project is ready for edits and to fetch our dependencies
+4. rename `.env.example` to `.env.local`
+5. edit `.env` and `.env.local`  give your app a name and generate an image signing key 
+6. `composer install --no-dev` fetches the php packages
+7. `yarn` fetches the js modules
+8. `yarn dev` starts the client with 'hot reloading'
+
+Please visit http://symvue.jameshcooper.com/ for your new project.
+
+## Project root example
+
+My website is http://symvue.jameshcooper.com/ 
+
+The web server root on the filesystem is `/var/www/public/`
+
+The SymVue project root needs to reside out of the web server root e.g. `/var/www`
+
+http://symvue.jameshcooper.com/ serves `/var/www/public/index.php`
+
+For more information see [Symfony - Configuring a Web Server](https://symfony.com/doc/current/setup/web_server_configuration.html)
+
+## Image Storage
+
+1) On AWS S3, create a private S3 bucket
+
+2) Next create an AWS IAM user with access to the bucket
+
+3) Edit `.env.local` with your AWS credentials -
+```
+AWS_BUCKET=mybucket
+AWS_REGION=eu-west-2
+AWS_KEY=mykey
+AWS_SECRET=mysecret
+```
+4) In the bucket create a directory per album, and upload images into each directory.  
+
 ### Routes
 
-There are three controllers which serve the routes.
+There are three controllers which serve the routes. 
 
-1) VueController: Renders the Frontend Client
+1) VueController: Renders the Frontend Client with its own [page router](vue-router).
 ```
 [GET] / 
-[GET] /a-different-route
+[GET] /all-routes-load-our-client
 ```
 2) APIController - Queries a directory in the S3 Bucket
 ```
@@ -30,7 +86,7 @@ There are three controllers which serve the routes.
 [GET] /img/directory_name/image.jpgp=small&s=3bab352a1e50f1861c78b63e9ddbe7ba
 ```
 
-Please note the parameters on the image -
+Image parameters -
 
 ```
 p: Preset
@@ -45,7 +101,7 @@ Presets are incredibly powerful and can flip, crop, watermark and add effects to
 
 #### Example album request
 ```
-[GET] https://mymediaproject.com/api/myalbum/all
+[GET] http://symvue.jameshcooper.com/api/album/tt1109624/all
 ```
 #### Response
 ```200```
@@ -74,90 +130,37 @@ Presets are incredibly powerful and can flip, crop, watermark and add effects to
   },
 ]
 ```
-
-# Built upon
-* [Symfony](https://github.com/symfony/symfony)
-* [Flysystem](https://github.com/thephpleague/flysystem)
-* [Glide](https://github.com/thephpleague/glide)
-* [Webpack-Encore](https://github.com/symfony/webpack-encore)
-* [vue.js](https://github.com/vuejs)
-* [vue-router](https://github.com/vuejs/vue-router)
-* [axios](https://github.com/axios/axios) 
-
-Also includes a demo [vue-bootstrap](https://bootstrap-vue.js.org/) client with vue-fontawesome to demonstrate the routes, data getters and to help get the project started. The frontend framework can be switched over to Bulma or Vue Material if you'd rather.
-
-# Demo
-
-[http://symvue.jameshcooper.com](http://symvue.jameshcooper.com) - IMDB Movie App
-
-# Installation & Development
-
-1. `cd /var/www`
-2. `git clone . `
-3. once cloned, the project is ready for edits and to fetch our dependencies
-4. rename `.env.example` to `.env.local`
-5. edit `.env` and `.env.local` - give your app a name and generate an image signing key 
-6. `composer install` - fetches the php packages
-7. `yarn` fetches the js modules
-8. `yarn dev` starts the client with 'hot reloading'
-
-Please visit https://mymediaproject.com for your new project.
-
-## Project root example
-
-My website is https://mymediaproject.com 
-
-The web server root on the filesystem is `/var/www/public/`
-
-The SymVue project root needs to reside out of the web server root e.g. `/var/www`
-
-https://mymediaproject.com serves `/var/www/public/index.php`
-
-For more information see [Symfony - Configuring a Web Server](https://symfony.com/doc/current/setup/web_server_configuration.html)
-
-## Image Storage
-
-1) On AWS S3, create a private S3 bucket
-
-2) Next create an AWS IAM user with access to the bucket
-
-3) Edit `.env.local` with your AWS credentials -
-```
-AWS_BUCKET=mybucket
-AWS_REGION=eu-west-2
-AWS_KEY=mykey
-AWS_SECRET=mysecret
-```
-
-4) In the bucket, create a directory for each album
-
-5) Upload images into the bucket directory
-
 ## Frontend Client
 
 Please create your application in `'client/'`
 
-### REST Interface with Axios
-Edit `client/plugins/axios.js` and update baseURL to the root of the application
-
-```
-const my_app = axios.create({
-  baseURL: "https://mymediaproject.com"
-});
-```
-
-### Load images 
+### Load an image album
 Please see `'client/router/pages/MyApp_Album.vue'`
 
 ### Create a page
 Please add to `'client/router/pages/'`
 
-### Define routes
+### <a name="vue-router">Define routes</a>
 Please edit `'client/router/index.js'`
+
+### REST Interface with Axios
+Edit `client/plugins/axios.js`
+
+The `my_app` instance is for accessing our SymVue REST. Additional endpoints can be added here.
+
+If you need to connect to a different API, please create a new instance of Axios and update the baseURL -
+
+```
+const imdb_api = axios.create({
+  baseURL: "http://omdbapi.com/"
+});
+```
 
 ### Hot reloading
 
-While developing if you make a change in a .vue file, there's no need to refresh the page as there's hot reloading. 
+`yarn dev` starts the client with 'hot reloading'
+
+While developing if you make a change in a .vue file, there's no need to refresh the page. 
 
 Coupled with Chrome's Vue.js devtools extension, projects are a lot of fun to develop! 
 
@@ -168,7 +171,7 @@ If you develop in a local environment, SymVue is easy to deploy to a production 
 1. `yarn prod` to compile assets on local
 2. commit into git and pull on production
 3. create a seperate .env.local on production, ensure `APP_ENV=prod`
-4. `composer install` on production
+4. `composer install --no-dev --optimize-autoloader` on production
 
 ### Extending (optional)  
 Once Symfony is installed on production, SymVue can be extended in order for frontend client updates to be pushed as a separate process. 
